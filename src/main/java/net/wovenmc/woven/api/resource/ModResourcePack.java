@@ -14,12 +14,19 @@
  * limitations under the License.
  */
 
-package net.wovenmc.woven.api.template;
+package net.wovenmc.woven.api.resource;
+
+import net.fabricmc.loader.api.metadata.ModMetadata;
+import net.minecraft.resource.ResourcePack;
 
 /**
- * Represents a dummy class as template for API.
- * <p>
- * This should not be present in any module.
+ * Represents a mod-provided resource pack.
  */
-public class TemplateAPI {
+public interface ModResourcePack extends ResourcePack {
+	/**
+	 * Returns the mod metadata associated with the mod providing this resource pack.
+	 *
+	 * @return The mod metadata.
+	 */
+	ModMetadata getModMetadata();
 }
