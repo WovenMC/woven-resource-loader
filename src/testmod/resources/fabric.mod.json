@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "id": "woven_resource_loader",
-  "name": "Woven Resource Loader",
+  "id": "woven_resource_loader_testmod",
+  "name": "Woven Resource Loader Test Mod",
   "version": "${version}",
   "description": "${description}",
   "license": "Apache-2.0",
@@ -20,9 +20,7 @@
   "mixins": [],
   "depends": {
     "fabricloader": ">=0.9.0",
-    "minecraft": ">=1.16.2"
-  },
-  "custom": {
-    "modmenu:api": true
+    "minecraft": ">=1.16.2",
+    "woven_resource_loader": ">=0.1.0"
   }
 }
