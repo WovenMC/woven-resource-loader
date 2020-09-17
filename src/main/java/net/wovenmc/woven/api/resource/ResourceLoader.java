@@ -16,20 +16,5 @@
 
 package net.wovenmc.woven.api.resource;
 
-import net.fabricmc.loader.api.metadata.ModMetadata;
-import net.minecraft.resource.ResourcePack;
-
-/**
- * Represents a mod-provided resource pack.
- *
- * @version 0.1.0
- * @since 0.1.0
- */
-public interface ModResourcePack extends ResourcePack {
-	/**
-	 * Returns the mod metadata associated with the mod providing this resource pack.
-	 *
-	 * @return The mod metadata.
-	 */
-	ModMetadata getModMetadata();
+public interface ResourceLoader {
 }

@@ -16,6 +16,9 @@
   "icon": "assets/woven/icon.png",
   "environment": "*",
   "entrypoints": {
+    "main": [
+      "net.wovenmc.woven.test.resource.ResourceLoaderTestMod"
+    ]
   },
   "mixins": [],
   "depends": {

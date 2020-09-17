@@ -24,6 +24,7 @@ import net.minecraft.resource.ResourcePack;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.resource.metadata.ResourceMetadataReader;
 import net.minecraft.util.Identifier;
+import net.wovenmc.woven.api.resource.ModResourcePack;
 import net.wovenmc.woven.mixin.resource.AbstractFileResourcePackAccessor;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,13 +39,16 @@ import java.util.function.Predicate;
  * Represents the Programmer Art resource pack.
  * <p>
  * It contains the original resource pack provided by Minecraft and the mod Programmer Art extension resource packs.
+ *
+ * @version 0.1.0
+ * @since 0.1.0
  */
 @Environment(EnvType.CLIENT)
 public class ProgrammerArtResourcePack implements ResourcePack {
 	private AbstractFileResourcePack originalResourcePack;
-	private List<ResourcePack> modResourcePacks;
+	private List<ModResourcePack> modResourcePacks;
 
-	public ProgrammerArtResourcePack(AbstractFileResourcePack originalResourcePack, List<ResourcePack> modResourcePacks) {
+	public ProgrammerArtResourcePack(AbstractFileResourcePack originalResourcePack, List<ModResourcePack> modResourcePacks) {
 		this.originalResourcePack = originalResourcePack;
 		this.modResourcePacks = modResourcePacks;
 	}
@@ -74,7 +78,7 @@ public class ProgrammerArtResourcePack implements ResourcePack {
 		}
 
 		throw new ResourceNotFoundException(((AbstractFileResourcePackAccessor) this.originalResourcePack).getBase(),
-			String.format("%s/%s/%s", type.getDirectory(), id.getNamespace(), id.getPath()));
+				String.format("%s/%s/%s", type.getDirectory(), id.getNamespace(), id.getPath()));
 	}
 
 	@Override

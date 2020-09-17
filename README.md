@@ -9,6 +9,6 @@ In this module the term "Resource Pack" means at the same time "Client Resource 
 ## Goals
 
  - [ ] Load mod resource packs.
- - [ ] Load mod Programmer Art assets.
+ - [x] Load mod Programmer Art assets.
  - [ ] Allow mods to define additional built-in resource packs.
  - [ ] Allow mods to inject virtual resource packs.

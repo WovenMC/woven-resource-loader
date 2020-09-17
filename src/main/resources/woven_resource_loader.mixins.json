@@ -5,6 +5,10 @@
   "mixins": [
     "AbstractFileResourcePackAccessor"
   ],
+  "client": [
+    "client.ClientBuiltinResourcePackProviderMixin",
+    "client.PackScreenMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   }
