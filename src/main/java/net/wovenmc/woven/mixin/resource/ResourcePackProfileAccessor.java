@@ -14,20 +14,15 @@
  * limitations under the License.
  */
 
-package net.wovenmc.woven.mixin.resource.compat;
+package net.wovenmc.woven.mixin.resource;
 
 import net.minecraft.resource.ResourcePackProfile;
-import net.minecraft.resource.ResourcePackProvider;
+import net.minecraft.resource.ResourcePackSource;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Pseudo;
+import org.spongepowered.asm.mixin.gen.Accessor;
 
-import java.util.function.Consumer;
-
-@Pseudo
-@Mixin(targets = "net.fabricmc.fabric.impl.resource.loader.ModResourcePackCreator")
-public abstract class ModResourcePackCreatorMixin implements ResourcePackProvider {
-	@Override
-	public void register(Consumer<ResourcePackProfile> consumer, ResourcePackProfile.Factory factory) {
-		//@TODO make this actually a thing
-	}
+@Mixin(ResourcePackProfile.class)
+public interface ResourcePackProfileAccessor {
+	@Accessor("source")
+	ResourcePackSource getResourcePackSource();
 }

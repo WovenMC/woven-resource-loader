@@ -3,10 +3,16 @@
   "package": "net.wovenmc.woven.mixin.resource",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "AbstractFileResourcePackAccessor"
+    "AbstractFileResourcePackAccessor",
+    "DefaultResourcePackMixin",
+    "FileResourcePackProviderAccessor",
+    "MinecraftServerMixin",
+    "ResourcePackManagerAccessor",
+    "ResourcePackManagerMixin"
   ],
   "client": [
     "client.ClientBuiltinResourcePackProviderMixin",
+    "client.CreateWorldScreenMixin",
     "client.PackScreenMixin"
   ],
   "injectors": {
