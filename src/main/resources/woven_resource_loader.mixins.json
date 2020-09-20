@@ -6,12 +6,16 @@
     "AbstractFileResourcePackAccessor",
     "DefaultResourcePackMixin",
     "FileResourcePackProviderAccessor",
+    "IdentifiableResourceReloadListenersMixin$Server",
     "MinecraftServerMixin",
+    "ReloadableResourceManagerImplMixin",
     "ResourcePackManagerAccessor",
     "ResourcePackManagerMixin",
     "ResourcePackProfileAccessor"
   ],
   "client": [
+    "IdentifiableResourceReloadListenersMixin$Client",
+    "IdentifiableResourceReloadListenersMixin$FontManager",
     "client.ClientBuiltinResourcePackProviderMixin",
     "client.CreateWorldScreenMixin",
     "client.PackScreenMixin"

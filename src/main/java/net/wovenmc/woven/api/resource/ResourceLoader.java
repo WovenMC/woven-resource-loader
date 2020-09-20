@@ -17,6 +17,7 @@
 package net.wovenmc.woven.api.resource;
 
 import net.fabricmc.loader.api.ModContainer;
+import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import net.wovenmc.woven.impl.resource.ResourceLoaderImpl;
 
@@ -37,6 +38,17 @@ public interface ResourceLoader {
 	}
 
 	/**
+	 * Get the {@code ResourceManagerHelper} instance for a given resource type.
+	 *
+	 * @param type The given resource type.
+	 * @return The {@code ResourceManagerHelper} instance.
+	 * @see ResourceManagerHelper#get(ResourceType)
+	 */
+	default ResourceManagerHelper getResourceManagerHelper(ResourceType type) {
+		return ResourceManagerHelper.get(type);
+	}
+
+	/**
 	 * Registers a built-in resource pack.
 	 * <p>
 	 * A built-in resource pack is an extra resource pack provided by your mod which is not necessarily always active, it's similar to the "Programmer Art" resource pack.
@@ -50,8 +62,8 @@ public interface ResourceLoader {
 	 * Note about the activation type parameter set to {@link ResourcePackActivationType#DEFAULT_ENABLED}: a resource pack cannot be enabled by default, only data packs can.
 	 * Making this work for resource packs is near impossible without touching how Vanilla handles disabled resource packs.
 	 *
-	 * @param id The identifier of the resource pack.
-	 * @param container The mod container.
+	 * @param id             The identifier of the resource pack.
+	 * @param container      The mod container.
 	 * @param activationType The activation type of the resource pack.
 	 * @return True if successfully registered the resource pack, else false.
 	 */

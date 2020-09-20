@@ -16,6 +16,9 @@
 
 package net.wovenmc.woven.api.resource;
 
+import net.minecraft.resource.ResourceType;
+import net.wovenmc.woven.impl.resource.ResourceManagerHelperImpl;
+
 /**
  * Helper for working with {@link net.minecraft.resource.ResourceManager} instances.
  *
@@ -23,4 +26,20 @@ package net.wovenmc.woven.api.resource;
  * @since 0.1.0
  */
 public interface ResourceManagerHelper {
+	/**
+	 * Get the {@code ResourceManagerHelper} instance for a given resource type.
+	 *
+	 * @param type The given resource type.
+	 * @return The {@code ResourceManagerHelper} instance.
+	 */
+	static ResourceManagerHelper get(ResourceType type) {
+		return ResourceManagerHelperImpl.get(type);
+	}
+
+	/**
+	 * Register a resource reload listener for a given resource manager type.
+	 *
+	 * @param listener The resource reload listener.
+	 */
+	void registerReloadListener(IdentifiableResourceReloadListener listener);
 }
