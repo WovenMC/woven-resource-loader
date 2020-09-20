@@ -18,6 +18,7 @@ package net.wovenmc.woven.impl.resource;
 
 import net.fabricmc.loader.api.FabricLoader;
 import org.objectweb.asm.tree.ClassNode;
+import org.spongepowered.asm.mixin.MixinEnvironment;
 import org.spongepowered.asm.mixin.Mixins;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -31,30 +32,53 @@ import java.util.Set;
 public class ResourceLoaderMixinPlugin implements IMixinConfigPlugin {
 	@Override
 	public void onLoad(String mixinPackage) {
-		System.out.println("BEGIN WOVEN RESOURCE LOADER MIXIN LOAD");
+		Class<?> mixinConfigClass;
+		try {
+			mixinConfigClass = Class.forName("org.spongepowered.asm.mixin.transformer.MixinConfig");
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Failed to yeet fabric-resource-loader mixins", e);
+		}
 
-		Iterator<Config> it = Mixins.getConfigs().iterator();
-
-		while (it.hasNext()) {
-			Config config = it.next();
-			System.out.println(config);
-
+		// Yeet from pending configs
+		for (Config config : Mixins.getConfigs()) {
 			if (config.getName().contains("fabric-resource-loader")) {
 				try {
 					Field internalConfigField = Config.class.getDeclaredField("config");
 					internalConfigField.setAccessible(true);
 					Object internalConfig = internalConfigField.get(config);
-					Class<?> internalConfigClass = Class.forName("org.spongepowered.asm.mixin.transformer.MixinConfig");
-					Field env = internalConfigClass.getDeclaredField("env");
+					Field env = mixinConfigClass.getDeclaredField("env");
 					env.setAccessible(true);
 					env.set(internalConfig, null);
-				} catch (NoSuchFieldException | IllegalAccessException | ClassNotFoundException e) {
-					e.printStackTrace();
+				} catch (NoSuchFieldException | IllegalAccessException e) {
+					throw new RuntimeException("Failed to yeet fabric-resource-loader mixins", e);
 				}
-
-				System.out.println("YEET");
+				return;
 			}
 		}
+		// Yeet from MixinProcessor pending configs
+		Object activeTransformer = MixinEnvironment.getCurrentEnvironment().getActiveTransformer();
+		try {
+			Field processorField = Class.forName("org.spongepowered.asm.mixin.transformer.MixinTransformer").getDeclaredField("processor");
+			processorField.setAccessible(true);
+			Object processor = processorField.get(activeTransformer);
+			Field pendingConfigsField = Class.forName("org.spongepowered.asm.mixin.transformer.MixinProcessor").getDeclaredField("pendingConfigs");
+			pendingConfigsField.setAccessible(true);
+			List<?> pendingConfigs = (List<?>) pendingConfigsField.get(processor);
+			Iterator<?> iter = pendingConfigs.iterator();
+			while (iter.hasNext()) {
+				Object mixinConfig = iter.next();
+				Field handleField = mixinConfigClass.getDeclaredField("handle");
+				handleField.setAccessible(true);
+				Config config = (Config) handleField.get(mixinConfig);
+				if (config.getName().contains("fabric-resource-loader")) {
+					iter.remove();
+					return;
+				}
+			}
+		} catch (NoSuchFieldException | ClassNotFoundException | IllegalAccessException e) {
+			throw new RuntimeException("Failed to yeet fabric-resource-loader mixins", e);
+		}
+
 	}
 
 	@Override
