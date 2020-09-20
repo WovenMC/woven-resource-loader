@@ -2,6 +2,7 @@
   "required": true,
   "package": "net.wovenmc.woven.mixin.resource",
   "compatibilityLevel": "JAVA_8",
+  "plugin": "net.wovenmc.woven.impl.resource.ResourceLoaderMixinPlugin",
   "mixins": [
     "AbstractFileResourcePackAccessor",
     "DefaultResourcePackMixin",
@@ -11,7 +12,8 @@
     "ReloadableResourceManagerImplMixin",
     "ResourcePackManagerAccessor",
     "ResourcePackManagerMixin",
-    "ResourcePackProfileAccessor"
+    "ResourcePackProfileAccessor",
+    "compat.ResourceManagerHelperImplMixin"
   ],
   "client": [
     "IdentifiableResourceReloadListenersMixin$Client",
