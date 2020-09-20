@@ -24,6 +24,7 @@ import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.InvalidIdentifierException;
 import net.wovenmc.woven.api.resource.ModResourcePack;
+import net.wovenmc.woven.api.resource.ResourcePackActivationType;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -58,14 +59,14 @@ public class ModNioResourcePack extends AbstractFileResourcePack implements ModR
 	private final ModMetadata modMetadata;
 	private final Path basePath;
 	private final String separator;
-	private final boolean defaultEnabled;
+	private final ResourcePackActivationType activationType;
 
-	public ModNioResourcePack(ModMetadata modMetadata, Path path, boolean defaultEnabled) {
+	public ModNioResourcePack(ModMetadata modMetadata, Path path, ResourcePackActivationType activationType) {
 		super(null);
 		this.modMetadata = modMetadata;
 		this.basePath = path;
 		this.separator = this.basePath.getFileSystem().getSeparator();
-		this.defaultEnabled = defaultEnabled;
+		this.activationType = activationType;
 	}
 
 	protected @Nullable Path resolvePath(String path) {
@@ -238,12 +239,8 @@ public class ModNioResourcePack extends AbstractFileResourcePack implements ModR
 		return this.modMetadata;
 	}
 
-	/**
-	 * Returns whether this mod resource pack should be enabled by default or not.
-	 *
-	 * @return True if this should be enabled by default, else false.
-	 */
-	public boolean isDefaultEnabled() {
-		return this.defaultEnabled;
+	@Override
+	public ResourcePackActivationType getActivationType() {
+		return this.activationType;
 	}
 }

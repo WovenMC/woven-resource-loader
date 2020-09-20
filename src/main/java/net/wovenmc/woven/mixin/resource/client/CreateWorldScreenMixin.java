@@ -62,7 +62,7 @@ public class CreateWorldScreenMixin {
 		for (ResourcePackProfile profile : moddedResourcePacks) {
 			ResourcePack pack = profile.createResourcePack();
 
-			if (pack instanceof ModNioResourcePack && ((ModNioResourcePack) pack).isDefaultEnabled()) {
+			if (pack instanceof ModNioResourcePack && ((ModNioResourcePack) pack).getActivationType().isEnabledByDefault()) {
 				enabled.add(profile.getName());
 			} else {
 				disabled.add(profile.getName());

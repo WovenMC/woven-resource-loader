@@ -32,4 +32,13 @@ public interface ModResourcePack extends ResourcePack {
 	 * @return The mod metadata.
 	 */
 	ModMetadata getModMetadata();
+
+	/**
+	 * Returns the activation type of this resource pack.
+	 *
+	 * @return The activation type.
+	 */
+	default ResourcePackActivationType getActivationType() {
+		return ResourcePackActivationType.NORMAL;
+	}
 }

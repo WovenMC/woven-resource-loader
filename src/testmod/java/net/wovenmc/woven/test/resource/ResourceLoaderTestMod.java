@@ -17,6 +17,10 @@
 package net.wovenmc.woven.test.resource;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.util.Identifier;
+import net.wovenmc.woven.api.resource.ResourceLoader;
+import net.wovenmc.woven.api.resource.ResourcePackActivationType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,5 +31,16 @@ public class ResourceLoaderTestMod implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		boolean result = FabricLoader.getInstance().getModContainer(NAMESPACE)
+				.map(container -> ResourceLoader.get().registerBuiltinResourcePack(new Identifier(NAMESPACE, "test"),
+						container,
+						ResourcePackActivationType.ALWAYS_ENABLED))
+				.orElse(false);
+
+		if (result) {
+			LOGGER.info("Successfully registered the built-in resource pack.");
+		} else {
+			LOGGER.warn("Failed to register the built-in resource pack.");
+		}
 	}
 }

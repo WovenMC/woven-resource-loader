@@ -18,14 +18,22 @@ package net.wovenmc.woven.impl.resource;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
+import net.minecraft.resource.ResourcePackProfile;
+import net.minecraft.resource.ResourcePackSource;
 import net.minecraft.resource.ResourceType;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.Pair;
 import net.wovenmc.woven.api.resource.ModResourcePack;
 import net.wovenmc.woven.api.resource.ResourceLoader;
+import net.wovenmc.woven.api.resource.ResourcePackActivationType;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.function.Consumer;
 
 /**
  * Represents the implementation of resource loader.
@@ -34,6 +42,50 @@ import java.util.List;
  * @since 0.1.0
  */
 public class ResourceLoaderImpl implements ResourceLoader {
+	public static final ResourceLoaderImpl INSTANCE = new ResourceLoaderImpl();
+
+	private final Set<Pair<String, ModNioResourcePack>> builtinResourcePacks = new HashSet<>();
+
+	@Override
+	public boolean registerBuiltinResourcePack(Identifier id, ModContainer container, ResourcePackActivationType activationType) {
+		String separator = container.getRootPath().getFileSystem().getSeparator();
+
+		Path resourcePackPath = container.getRootPath().resolve("resourcepacks" + separator + id.getPath().replace("/", separator))
+				.toAbsolutePath().normalize();
+
+		if (!Files.exists(resourcePackPath)) {
+			return false;
+		}
+
+		String name = id.getNamespace() + "/" + id.getPath();
+		builtinResourcePacks.add(new Pair<>(name, new ModNioResourcePack(container.getMetadata(), resourcePackPath, activationType) {
+			@Override
+			public String getName() {
+				return name;
+			}
+		}));
+
+		return true;
+	}
+
+	public void registerBuiltinResourcePacks(ResourceType resourceType, Consumer<ResourcePackProfile> consumer, ResourcePackProfile.Factory factory) {
+		// Loop through each registered built-in resource packs and add them if valid.
+		for (Pair<String, ModNioResourcePack> entry : this.builtinResourcePacks) {
+			// Add the built-in pack only if namespaces for the specified resource type are present.
+			if (!entry.getRight().getNamespaces(resourceType).isEmpty()) {
+				// Make the resource pack profile for built-in pack, should never be always enabled.
+				ResourcePackProfile profile = ResourcePackProfile.of(entry.getLeft(),
+						entry.getRight().getActivationType() == ResourcePackActivationType.ALWAYS_ENABLED,
+						entry::getRight, factory, ResourcePackProfile.InsertionPosition.TOP,
+						ResourcePackSource.PACK_SOURCE_BUILTIN);
+
+				if (profile != null) {
+					consumer.accept(profile);
+				}
+			}
+		}
+	}
+
 	/**
 	 * Appends mod resource packs to the given list.
 	 *
@@ -59,7 +111,7 @@ public class ResourceLoaderImpl implements ResourceLoader {
 				path = childPath;
 			}
 
-			ModResourcePack resourcePack = new ModNioResourcePack(container.getMetadata(), path, true);
+			ModResourcePack resourcePack = new ModNioResourcePack(container.getMetadata(), path, ResourcePackActivationType.ALWAYS_ENABLED);
 
 			if (!resourcePack.getNamespaces(type).isEmpty()) {
 				packs.add(resourcePack);

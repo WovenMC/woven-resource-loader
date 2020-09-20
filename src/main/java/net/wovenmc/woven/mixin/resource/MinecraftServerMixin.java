@@ -46,7 +46,7 @@ public class MinecraftServerMixin {
 				&& !profileName.equals("vanilla")) {
 			ResourcePack pack = profile.createResourcePack();
 			// Prevents automatic load for built-in data packs provided by mods.
-			return pack instanceof ModNioResourcePack && !((ModNioResourcePack) pack).isDefaultEnabled();
+			return pack instanceof ModNioResourcePack && !((ModNioResourcePack) pack).getActivationType().isEnabledByDefault();
 		}
 
 		return false;

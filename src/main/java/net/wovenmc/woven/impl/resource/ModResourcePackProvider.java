@@ -70,5 +70,8 @@ public class ModResourcePackProvider implements ResourcePackProvider {
 				consumer.accept(resourcePackProfile);
 			}
 		}
+
+		// Register all built-in resource packs provided by mods.
+		ResourceLoaderImpl.INSTANCE.registerBuiltinResourcePacks(this.type, consumer, factory);
 	}
 }
