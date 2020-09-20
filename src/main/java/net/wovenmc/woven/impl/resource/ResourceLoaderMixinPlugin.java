@@ -33,6 +33,7 @@ public class ResourceLoaderMixinPlugin implements IMixinConfigPlugin {
 	@Override
 	public void onLoad(String mixinPackage) {
 		Class<?> mixinConfigClass;
+
 		try {
 			mixinConfigClass = Class.forName("org.spongepowered.asm.mixin.transformer.MixinConfig");
 		} catch (ClassNotFoundException e) {
@@ -52,11 +53,14 @@ public class ResourceLoaderMixinPlugin implements IMixinConfigPlugin {
 				} catch (NoSuchFieldException | IllegalAccessException e) {
 					throw new RuntimeException("Failed to yeet fabric-resource-loader mixins", e);
 				}
+
 				return;
 			}
 		}
+
 		// Yeet from MixinProcessor pending configs
 		Object activeTransformer = MixinEnvironment.getCurrentEnvironment().getActiveTransformer();
+
 		try {
 			Field processorField = Class.forName("org.spongepowered.asm.mixin.transformer.MixinTransformer").getDeclaredField("processor");
 			processorField.setAccessible(true);
@@ -65,11 +69,13 @@ public class ResourceLoaderMixinPlugin implements IMixinConfigPlugin {
 			pendingConfigsField.setAccessible(true);
 			List<?> pendingConfigs = (List<?>) pendingConfigsField.get(processor);
 			Iterator<?> iter = pendingConfigs.iterator();
+
 			while (iter.hasNext()) {
 				Object mixinConfig = iter.next();
 				Field handleField = mixinConfigClass.getDeclaredField("handle");
 				handleField.setAccessible(true);
 				Config config = (Config) handleField.get(mixinConfig);
+
 				if (config.getName().contains("fabric-resource-loader")) {
 					iter.remove();
 					return;
@@ -78,7 +84,6 @@ public class ResourceLoaderMixinPlugin implements IMixinConfigPlugin {
 		} catch (NoSuchFieldException | ClassNotFoundException | IllegalAccessException e) {
 			throw new RuntimeException("Failed to yeet fabric-resource-loader mixins", e);
 		}
-
 	}
 
 	@Override
